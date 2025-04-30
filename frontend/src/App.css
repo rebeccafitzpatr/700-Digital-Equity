@@ -1,5 +1,6 @@
 #root {
   max-width: 1280px;
+  min-width:600px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
@@ -39,4 +40,24 @@
 
 .read-the-docs {
   color: #888;
+}
+
+.start-button {
+  width: 100px; /* Set the width of the button */
+  height: 100px; /* Set the height of the button */
+  border-radius: 50%; /* Make the button circular */
+  background-color: #007bff; /* Set the background color */
+  color: white; /* Set the text color */
+  border: none; /* Remove the border */
+  font-size: 1rem; /* Set the font size */
+  cursor: pointer; /* Change the cursor to a pointer on hover */
+  display: flex; /* Center the text inside the button */
+  justify-content: center;
+  margin:auto;
+  align-items: center;
+  transition: background-color 0.3s ease; /* Add a hover transition */
+}
+
+.start-button:hover {
+  background-color: #0056b3; /* Darken the background color on hover */
 }

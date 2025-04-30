@@ -33,7 +33,7 @@ function App() {
             <div>
             
               <h1>Speed Test</h1>
-              <button onClick={runSpeedTest} disabled={loading}>
+              <button className="start-button" onClick={runSpeedTest} disabled={loading}>
                 {loading ? 'Running...' : 'Run Speed Test'}
               </button>
               {results && (
