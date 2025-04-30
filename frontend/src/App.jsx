@@ -1,5 +1,9 @@
 import { useState } from 'react';
 import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Comparison from './pages/Comparison';
+import Login from './pages/Login';
 
 function App() {
   const [results, setResults] = useState(null);
@@ -19,18 +23,32 @@ function App() {
 
   return (
     <div id="root">
-      <h1>Speed Test</h1>
-      <button onClick={runSpeedTest} disabled={loading}>
-        {loading ? 'Running...' : 'Run Speed Test'}
-      </button>
-      {results && (
-        <div>
-          <p>Download Speed: {results.download} MB/s</p>
-          <p>Upload Speed: {results.upload} MB/s</p>
-          <p>Packet Loss: {results.packet_loss}%</p>
-          <p>Average Ping: {results.avg_ping} ms</p>
-        </div>
-      )}
+
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/comparison" element={<Comparison/>}/>
+          <Route path="/login" element={<Login/>}/>
+          <Route path="/" element={
+            <div>
+            
+              <h1>Speed Test</h1>
+              <button onClick={runSpeedTest} disabled={loading}>
+                {loading ? 'Running...' : 'Run Speed Test'}
+              </button>
+              {results && (
+                <div>
+                  <p>Download Speed: {results.download} MB/s</p>
+                  <p>Upload Speed: {results.upload} MB/s</p>
+                  <p>Packet Loss: {results.packet_loss}%</p>
+                  <p>Average Ping: {results.avg_ping} ms</p>
+                </div>
+              )}
+            </div>
+          } />
+        </Routes>
+      </Router>
+      
     </div>
   );
 }
