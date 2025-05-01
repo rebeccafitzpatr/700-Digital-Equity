@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ListItem from './ListItem';
 
-export default function Listview() {
+export default function ListView() {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -26,9 +26,16 @@ export default function Listview() {
   }
 
   return (
-    <div>
-      <h1>Leaderboard</h1>
-      <ul>
+    <div className="list-view">
+      <div className="list-view-header">
+        <span>Name</span>
+        <span>Region</span>
+        <span>Latency</span>
+        <span>Upload Speed</span>
+        <span>Download Speed</span>
+        <span>Device</span>
+      </div>
+      <ul className="list-view-items">
         {records.map((record, index) => (
           <ListItem key={index} record={record} />
         ))}

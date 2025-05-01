@@ -22,9 +22,30 @@ def speedtest():
 def leaderboard():
     # Replace this with actual database query
     data = [
-        {'name': 'School 1', 'score': 95},
-        {'name': 'School 2', 'score': 89},
-        {'name': 'School 3', 'score': 78}
+        {
+            'name': 'School 1',
+            'region': 'Auckland',
+            'latency': 30,
+            'upload': 80,
+            'download': 200,
+            'device': 'Laptop'
+        },
+        {
+            'name': 'School 2',
+            'region': 'Auckland',
+            'latency': 20,
+            'upload': 50,
+            'download': 100,
+            'device': 'Windows 10'
+        },
+        {
+            'name': 'School 3',
+            'region': 'Northland',
+            'latency': 40,
+            'upload': 100,
+            'download': 120,
+            'device': 'Laptop'
+        }
     ]
     return jsonify(data)
 
