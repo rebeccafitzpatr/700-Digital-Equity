@@ -2,7 +2,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
     color: #222;
 }
 
@@ -24,7 +23,8 @@
 .navbar-links a {
     
     text-decoration: none; /* Remove underline */
-    font-size: 1rem;
+    font-size: 2rem;
+    color:#999;
 }
 
 .navbar-links a:hover {

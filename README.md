@@ -1,5 +1,13 @@
 # React + Vite
 
+## Run instructions:
+Open two terminals in root directory:
+Terminal 1:
+Start server by with `python3 Web.py` or `python Web.py`
+
+Navigate to `/frontend` folder
+Run the commands `npm install` then`npm run dev`
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
