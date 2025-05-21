@@ -19,10 +19,14 @@ def get_size(bytes, suffix="B"):
 
 def ping_host(host):
     # Use 'ping' instead of 'ping.exe' for Linux
-    result = subprocess.run(['ping', '-c', '4', host], capture_output=True, text=True)
+    param = '-n' if platform.system().lower() == 'windows' else '-c'
+    command = ['ping', param, '1', host]
+    result = (subprocess.run(command, capture_output=True, text=True))
     return result.stdout
 
 def speedTest():
+
+    print(platform.system().lower())
         
     s = speedtest.Speedtest(secure=True)
 
@@ -36,7 +40,6 @@ def speedTest():
     print('Upload speed is:', upload, 'MB per second')
 
     output = ping_host("www.google.com")
-
 
     # Extract packet loss
     packet_loss_match = re.search(r"(\d+)% loss", output)
