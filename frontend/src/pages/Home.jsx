@@ -20,7 +20,7 @@ export default function Home() {
 
         <div className="home">
             
-            <h1>Speed Test</h1>
+            <h1>Welcome to Speed Test!</h1>
             <button className="start-button" onClick={runSpeedTest} disabled={loading}>
             {loading ? 'Running...' : 'Run Speed Test'}
             </button>
