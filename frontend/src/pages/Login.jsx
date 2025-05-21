@@ -1,7 +1,8 @@
+import SchoolLogin from '../components/login/SchoolLogin.jsx';
 export default function Login() {
     return (
         <div>
-            <h1>Login</h1>
+            <SchoolLogin />
         </div>
     )
 }
