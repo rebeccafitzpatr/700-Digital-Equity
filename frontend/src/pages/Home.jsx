@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import '../App.css'
 export default function Home() {
     const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -18,7 +18,7 @@ export default function Home() {
   };
     return (
 
-        <div>
+        <div className="home">
             
             <h1>Speed Test</h1>
             <button className="start-button" onClick={runSpeedTest} disabled={loading}>
