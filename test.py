@@ -44,13 +44,22 @@ def speedTest():
     packet_loss = int(match.group(1)) if match else None
 
     # Extract average ping
-    avg_ping_match = re.search(r'time=(\d+)\s*ms', output)
-    avg_ping = float(avg_ping_match.group(1)) if avg_ping_match else None
+    ping_match = re.search(r'time=(\d+(?:\.\d+)?)\s*ms', output)
+
+    if ping_match:
+        ping_str = ping_match.group(1)
+        
+        # Ensure it has exactly 1 decimal place
+        if '.' not in ping_str:
+            ping_time = f"{ping_str}.0"
+        else:
+            # Optional: ensure only 1 decimal place even if more
+            ping_time = f"{float(ping_str):.1f}"
 
     print(f"Packet Loss: {packet_loss}%")
-    print(f"Average Ping: {avg_ping} ms")
+    print(f"Average Ping: {ping_time} ms")
 
-    return [download, upload, packet_loss, avg_ping]
+    return [download, upload, packet_loss, ping_time]
 
 def getHardware():
     print("="*40, "System Information", "="*40)
