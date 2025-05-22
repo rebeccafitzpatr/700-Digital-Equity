@@ -25,8 +25,6 @@ def ping_host(host):
     return result.stdout
 
 def speedTest():
-
-    print(platform.system().lower())
         
     s = speedtest.Speedtest(secure=True)
 
@@ -41,16 +39,16 @@ def speedTest():
 
     output = ping_host("www.google.com")
 
-    # Extract packet loss
-    packet_loss_match = re.search(r"(\d+)% loss", output)
-    packet_loss = int(packet_loss_match.group(1)) if packet_loss_match else None
+    print(repr(output))
+    print(output)
 
     # Extract packet loss
-    packet_loss_match = re.search(r"(\d+)% packet loss", output)
-    packet_loss = int(packet_loss_match.group(1)) if packet_loss_match else None
+
+    match = re.search(r'\((\d+)% loss\)', output)
+    packet_loss = int(match.group(1)) if match else None
 
     # Extract average ping
-    avg_ping_match = re.search(r"rtt min/avg/max/mdev = [\d.]+/([\d.]+)/[\d.]+/[\d.]+ ms", output)
+    avg_ping_match = re.search(r'time=(\d+)\s*ms', output)
     avg_ping = float(avg_ping_match.group(1)) if avg_ping_match else None
 
     print(f"Packet Loss: {packet_loss}%")
