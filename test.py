@@ -38,13 +38,9 @@ def speedTest():
     print('Upload speed is:', upload, 'MB per second')
 
     output = ping_host("www.google.com")
-
-    print(repr(output))
-    print(output)
-
     # Extract packet loss
 
-    match = re.search(r'\((\d+)% loss\)', output)
+    match = re.search(r'(\d+)\s*%', output)
     packet_loss = int(match.group(1)) if match else None
 
     # Extract average ping
