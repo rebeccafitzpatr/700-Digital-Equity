@@ -3,6 +3,7 @@
     justify-content: space-between;
     align-items: center;
     color: #222;
+    padding-bottom: 3rem;
 }
 
 .navbar-logo a {
@@ -60,6 +61,7 @@
   }
 
   .list-view {
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
     width: 100%;
     max-width: 800px; /* Limit the width of the list view */
     margin: 1rem auto; /* Center the list view */

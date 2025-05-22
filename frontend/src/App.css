@@ -1,9 +1,13 @@
 #root {
   max-width: 1280px;
   min-width:600px;
+  min-height:400px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  border: 3px solid rgba(49, 45, 45, 0.24);
+  border-radius: 8px;
+  background-color: #F9F9EF;
 }
 
 .logo {
@@ -53,11 +57,24 @@
   cursor: pointer; /* Change the cursor to a pointer on hover */
   display: flex; /* Center the text inside the button */
   justify-content: center;
-  margin:auto;
+  margin: 20px auto;
   align-items: center;
   transition: background-color 0.3s ease; /* Add a hover transition */
 }
 
 .start-button:hover {
   background-color: #0056b3; /* Darken the background color on hover */
+}
+
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin:auto;
+  min-height: 300px;
+}
+
+.home h1 {
+  margin:0;
 }
