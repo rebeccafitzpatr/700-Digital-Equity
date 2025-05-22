@@ -17,6 +17,13 @@ def get_size(bytes, suffix="B"):
             return f"{bytes:.2f}{unit}{suffix}"
         bytes /= factor
 
+def ping_host(host):
+    # Use 'ping' instead of 'ping.exe' for Linux
+    param = '-n' if platform.system().lower() == 'windows' else '-c'
+    command = ['ping', param, '1', host]
+    result = (subprocess.run(command, capture_output=True, text=True))
+    return result.stdout
+
 def speedTest():
         
     s = speedtest.Speedtest(secure=True)
@@ -30,33 +37,29 @@ def speedTest():
     print('Download speed is:', download, 'MB per second')
     print('Upload speed is:', upload, 'MB per second')
 
-    process = subprocess.Popen(["ping.exe","www.google.com"], stdout = subprocess.PIPE)
-
-    output, error = process.communicate()
-
-    # Decode bytes to string
-    output = output.decode("utf-8")
-
+    output = ping_host("www.google.com")
     # Extract packet loss
-    packet_loss_match = re.search(r"(\d+)% loss", output)
-    packet_loss = int(packet_loss_match.group(1)) if packet_loss_match else None
 
-    # Extract average ping (on Unix)
-    min_ping_match = re.search(r"Minimum = (\d+)ms", output)
-    min_ping = int(min_ping_match.group(1)) if min_ping_match else None
+    match = re.search(r'(\d+)\s*%', output)
+    packet_loss = int(match.group(1)) if match else None
 
-    max_ping_match = re.search(r"Maximum = (\d+)ms", output)
-    max_ping = int(max_ping_match.group(1)) if max_ping_match else None
+    # Extract average ping
+    ping_match = re.search(r'time=(\d+(?:\.\d+)?)\s*ms', output)
 
-    ping_match = re.search(r"Average = (\d+)ms", output)
-    avg_ping = int(ping_match.group(1)) if ping_match else None
+    if ping_match:
+        ping_str = ping_match.group(1)
+        
+        # Ensure it has exactly 1 decimal place
+        if '.' not in ping_str:
+            ping_time = f"{ping_str}.0"
+        else:
+            # Optional: ensure only 1 decimal place even if more
+            ping_time = f"{float(ping_str):.1f}"
 
     print(f"Packet Loss: {packet_loss}%")
-    print(f"Average Ping: {avg_ping} ms")
-    print(f"Maximum Ping: {max_ping} ms")
-    print(f"Minimum Ping: {min_ping} ms")
+    print(f"Average Ping: {ping_time} ms")
 
-    return [download, upload, packet_loss, avg_ping]
+    return [download, upload, packet_loss, ping_time]
 
 def getHardware():
     print("="*40, "System Information", "="*40)
@@ -86,3 +89,4 @@ def getHardware():
 
 if __name__ == '__main__':
     speedTest()
+
