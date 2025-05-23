@@ -1,7 +1,7 @@
-import style from './login.module.css';
+
 export default function SchoolLogin() {
     return (
-        <div className={style.background}>
+        <div>
             <h1>School Login</h1>
             <form>
                 <div>

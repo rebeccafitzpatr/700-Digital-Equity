@@ -1,7 +1,7 @@
-import style from './login.module.css';
+
 export default function OtherLogin() {
     return (
-        <div className={style.background}>
+        <div>
             <h1>Other Login</h1>
             <form>
                 <div>
