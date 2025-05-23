@@ -15,5 +15,6 @@ export default function SchoolLogin() {
                 <button type="submit">Login</button>
             </form>
         </div>
+
     )
 }
