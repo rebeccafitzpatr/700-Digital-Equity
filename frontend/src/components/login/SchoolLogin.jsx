@@ -17,6 +17,7 @@ export default function SchoolLogin() {
             const data = await res.json();
             if (res.ok && data.success) {
                 // Login successful, you can redirect or store user info/token here
+                localStorage.setItem('username', username); // Save username
                 alert('Login successful!');
             } else {
                 setError(data.message || 'Login failed');
