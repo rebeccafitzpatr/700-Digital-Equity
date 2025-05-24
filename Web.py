@@ -1,8 +1,13 @@
 from flask import Flask, jsonify, send_from_directory
 from flask_cors import CORS
 import test
+from pymongo import MongoClient
 app = Flask(__name__, static_folder='frontend/dist', static_url_path='')
 CORS(app)
+
+client = MongoClient('mongodb+srv://rebeccafitzpatrick:hfJ|m#gv5W55@cluster0.pvplf8n.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+db = client['700_web_tool_db']
+leaderboard_collection = db['leaderboard']
 
 @app.route('/')
 def serve_frontend():
@@ -21,32 +26,7 @@ def speedtest():
 @app.route('/api/leaderboard', methods=['GET'])
 def leaderboard():
     # Replace this with actual database query
-    data = [
-        {
-            'name': 'School 1',
-            'region': 'Auckland',
-            'latency': 30,
-            'upload': 80,
-            'download': 200,
-            'device': 'Laptop'
-        },
-        {
-            'name': 'School 2',
-            'region': 'Auckland',
-            'latency': 20,
-            'upload': 50,
-            'download': 100,
-            'device': 'Windows 10'
-        },
-        {
-            'name': 'School 3',
-            'region': 'Northland',
-            'latency': 40,
-            'upload': 100,
-            'download': 120,
-            'device': 'Laptop'
-        }
-    ]
+    data = list(leaderboard_collection.find({}, {'_id': 0}))  # Exclude MongoDB's _id field
     return jsonify(data)
 
 if __name__ == '__main__':

@@ -10,6 +10,7 @@ export default function ListView() {
       try {
         const response = await fetch('http://127.0.0.1:5000/api/leaderboard'); // Replace with your API endpoint
         const data = await response.json();
+        console.log('Fetched leaderboard data:', data); // Debugging line
         setRecords(data);
       } catch (error) {
         console.error('Error fetching leaderboard data:', error);
