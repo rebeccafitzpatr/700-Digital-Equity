@@ -1,11 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../App.css'
 export default function Home() {
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const username = localStorage.getItem('username');
-  
+
+  useEffect(() => {
+    const savedResults = localStorage.getItem('speedtestResults');
+    if (savedResults) {
+      setResults(JSON.parse(savedResults));
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('username');
+    localStorage.removeItem('speedtestResults');
+    setResults(null);
+    window.location.reload(); // or use navigate('/') if using react-router
+  };
+
   const runSpeedTest = async () => {
      setLoading(true);
   try {
@@ -18,6 +32,7 @@ export default function Home() {
     });
     const data = await response.json();
     setResults(data.result);
+    localStorage.setItem('speedtestResults', JSON.stringify(data.result));
   } catch (error) {
     console.error('Error fetching speed test results:', error);
   } finally {
@@ -31,6 +46,7 @@ export default function Home() {
             <h1>
               {username ? `Welcome, ${username}` : 'Welcome to Speed Test!'}
             </h1>
+              
             <button className="start-button" onClick={runSpeedTest} disabled={loading}>
             {loading ? 'Running...' : 'Run Speed Test'}
             </button>
@@ -42,6 +58,12 @@ export default function Home() {
                 <p>Average Ping: {results.avg_ping} ms</p>
             </div>
             )}
+
+            {username && (
+              <button onClick={handleLogout} style={{ marginBottom: '1rem' }}>
+                Logout
+              </button>
+            )}  
         </div>
     )
 }
