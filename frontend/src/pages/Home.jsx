@@ -5,16 +5,23 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   const runSpeedTest = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch('http://127.0.0.1:5000/web');      
-      const data = await response.json();
-      setResults(data);
-    } catch (error) {
-      console.error('Error fetching speed test results:', error);
-    } finally {
-      setLoading(false);
-    }
+     setLoading(true);
+  try {
+    // Check for logged-in user (adjust this logic as needed)
+    const username = localStorage.getItem('username') || 'guest';
+
+    const response = await fetch('http://127.0.0.1:5000/api/speedtest', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username }),
+    });
+    const data = await response.json();
+    setResults(data.result);
+  } catch (error) {
+    console.error('Error fetching speed test results:', error);
+  } finally {
+    setLoading(false);
+  }
   };
     return (
 
