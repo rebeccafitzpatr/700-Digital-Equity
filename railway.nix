@@ -1,7 +1,13 @@
- { pkgs ? import <nixpkgs> {} }:
-   pkgs.mkShell {
-     buildInputs = [
-       pkgs.python3
-       pkgs.iputils
-     ];
-   }
+{ pkgs }:
+
+pkgs.mkShell {
+  buildInputs = with pkgs; [
+    python312
+    python312Packages.pip
+    python312Packages.flask
+    python312Packages.flask_cors
+    iputils  # Provides `ping`
+    nodejs_20
+    nodePackages.vite
+  ];
+}
