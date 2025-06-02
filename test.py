@@ -3,6 +3,8 @@ import subprocess
 import re
 import platform
 import psutil
+from ping3 import ping
+
 
 def get_size(bytes, suffix="B"):
     """
@@ -18,11 +20,14 @@ def get_size(bytes, suffix="B"):
         bytes /= factor
 
 def ping_host(host):
-    # Use 'ping' instead of 'ping.exe' for Linux
-    param = '-n' if platform.system().lower() == 'windows' else '-c'
-    command = ['ping', param, '1', host]
-    result = (subprocess.run(command, capture_output=True, text=True))
-    return result.stdout
+    def ping_host(host):
+    try:
+        response_time = ping(host, timeout=2)  # in seconds
+        if response_time is None:
+            return "Request timed out"
+        return round(response_time * 1000, 2)  # convert to ms
+    except Exception as e:
+        return str(e)
 
 def speedTest():
         
