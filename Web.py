@@ -1,8 +1,14 @@
-from flask import Flask, jsonify, send_from_directory
+from flask import Flask, jsonify, send_from_directory, request
 from flask_cors import CORS
 import test
+from pymongo import MongoClient
 app = Flask(__name__, static_folder='frontend/dist', static_url_path='')
 CORS(app)
+
+client = MongoClient('mongodb+srv://rebeccafitzpatrick:hfJ|m#gv5W55@cluster0.pvplf8n.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+db = client['700_web_tool_db']
+leaderboard_collection = db['leaderboard']
+users_collection = db['users']
 
 @app.route('/')
 def serve_frontend():
@@ -18,36 +24,49 @@ def speedtest():
         'avg_ping': avg_ping
     })
 
+@app.route('/api/speedtest', methods=['POST'])
+def user_speedtest():
+    data = request.json
+    username = data.get('username')
+    if not username:
+        return jsonify({'success': False, 'message': 'Username required'}), 400
+
+    # Run the speed test
+    download, upload, packet_loss, avg_ping = test.speedTest()
+
+    # Store the result in the database
+    speedtest_record = {
+        'name': username,
+        'download': download,
+        'upload': upload,
+        'packet_loss': packet_loss,
+        'avg_ping': avg_ping
+    }
+    leaderboard_collection.insert_one(speedtest_record)
+    speedtest_record.pop('_id', None)  # Remove MongoDB's _id field for the response
+
+    return jsonify({'success': True, 'result': speedtest_record})
+
 @app.route('/api/leaderboard', methods=['GET'])
 def leaderboard():
     # Replace this with actual database query
-    data = [
-        {
-            'name': 'School 1',
-            'region': 'Auckland',
-            'latency': 30,
-            'upload': 80,
-            'download': 200,
-            'device': 'Laptop'
-        },
-        {
-            'name': 'School 2',
-            'region': 'Auckland',
-            'latency': 20,
-            'upload': 50,
-            'download': 100,
-            'device': 'Windows 10'
-        },
-        {
-            'name': 'School 3',
-            'region': 'Northland',
-            'latency': 40,
-            'upload': 100,
-            'download': 120,
-            'device': 'Laptop'
-        }
-    ]
+    data = list(leaderboard_collection.find({}, {'_id': 0}))  # Exclude MongoDB's _id field
     return jsonify(data)
+
+@app.route('/api/users', methods=['GET'])
+def get_users():
+    users = list(users_collection.find({}, {'_id': 0}))
+    return jsonify(users)
+
+# Example: login route using users_collection
+@app.route('/api/login', methods=['POST'])
+def login():
+    data = request.json
+    user = users_collection.find_one({"username": data.get("username"), "password": data.get("password")})
+    if user:
+        return jsonify({"success": True, "user": user["username"]})
+    else:
+        return jsonify({"success": False, "message": "Invalid credentials"}), 401
 
 if __name__ == '__main__':
     app.run()
