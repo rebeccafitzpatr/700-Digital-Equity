@@ -25,7 +25,7 @@ export default function Home() {
   try {
     // Check for logged-in user (adjust this logic as needed)
 
-    const response = await fetch('http://127.0.0.1:5000/api/speedtest', {
+    const response = await fetch('/api/speedtest', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username: username || 'guest' }),
