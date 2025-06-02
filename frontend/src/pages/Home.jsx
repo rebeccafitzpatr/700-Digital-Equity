@@ -21,23 +21,36 @@ export default function Home() {
   };
 
   const runSpeedTest = async () => {
-     setLoading(true);
-  try {
+    setLoading(true);
     // Check for logged-in user (adjust this logic as needed)
-
-    const response = await fetch('/api/speedtest', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username: username || 'guest' }),
-    });
-    const data = await response.json();
-    setResults(data.result);
-    localStorage.setItem('speedtestResults', JSON.stringify(data.result));
-  } catch (error) {
-    console.error('Error fetching speed test results:', error);
-  } finally {
-    setLoading(false);
-  }
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords;
+          // Send latitude and longitude to backend with the speed test result
+          const response = await fetch('/api/speedtest', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+              username: username || 'guest', 
+              latitude,
+              longitude
+            }),
+          });
+          const data = await response.json();
+          setResults(data.result);
+          localStorage.setItem('speedtestResults', JSON.stringify(data.result));
+        } catch (error) {
+          console.error('Error fetching speed test results:', error);
+        } finally {
+          setLoading(false);
+        }
+      },
+      (error) => {
+        console.error('Geolocation error:', error);
+        setLoading(false);
+      }
+    );
   };
     return (
 

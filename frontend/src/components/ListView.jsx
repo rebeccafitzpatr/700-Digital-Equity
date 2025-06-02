@@ -35,6 +35,8 @@ export default function ListView() {
         <span>Upload Speed</span>
         <span>Download Speed</span>
         <span>Device</span>
+        <span>Date</span>
+        <span>Location</span>
       </div>
       <ul className="list-view-items">
         {records.map((record, index) => (
