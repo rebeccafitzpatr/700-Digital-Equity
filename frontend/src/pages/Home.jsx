@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../App.css'
+import { measureDownloadSpeed, measureLatency, measureUploadSpeed } from '../ClientSpeedTest.js';
+
 export default function Home() {
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -28,18 +30,28 @@ export default function Home() {
         try {
           const { latitude, longitude } = position.coords;
           // Send latitude and longitude to backend with the speed test result
-          const response = await fetch('/api/speedtest', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-              username: username || 'guest', 
-              latitude,
-              longitude
-            }),
-          });
-          const data = await response.json();
-          setResults(data.result);
-          localStorage.setItem('speedtestResults', JSON.stringify(data.result));
+          const latency = await measureLatency();
+          const downloadSpeed = await measureDownloadSpeed();
+          const uploadSpeed = await measureUploadSpeed();
+
+          const result = {
+            username: username || 'guest',
+            download: downloadSpeed,
+            avg_ping: latency,
+            upload: uploadSpeed,
+            latitude,
+            longitude
+          };
+
+          await fetch('/api/speedtest', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(result)
+        });
+
+
+          setResults(result)
+          setLoading(false);
         } catch (error) {
           console.error('Error fetching speed test results:', error);
         } finally {

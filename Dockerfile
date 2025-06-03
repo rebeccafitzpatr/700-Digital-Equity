@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 5000
 
 # Start your app
-CMD ["python", "Web.py"]
+CMD ["gunicorn", "Web:app", "--bind", "0.0.0.0:8000", "--timeout", "120", "--workers", "2"]
