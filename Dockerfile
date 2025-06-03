@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 8000
 
 # Start your app
-CMD ["gunicorn", "Web:app", "--bind", "0.0.0.0:$PORT", "--timeout", "120", "--workers", "2"]
+CMD gunicorn Web:app --bind 0.0.0.0:$PORT --timeout 120 --workers 2
