@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Expose the port your app runs on
-EXPOSE 5000
+EXPOSE 8000
 
 # Start your app
-CMD ["gunicorn", "Web:app", "--bind", "0.0.0.0:8000", "--timeout", "120", "--workers", "2"]
+CMD ["gunicorn", "Web:app", "--bind", "0.0.0.0:$PORT", "--timeout", "120", "--workers", "2"]
