@@ -41,7 +41,7 @@ export default function Home() {
            
           };
 
-        const response = await fetch('http://localhost:5000/api/speedtest', {
+        const response = await fetch('https://700-digital-equity-production-c1d4.up.railway.app/api/speedtest', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(TEST)

@@ -15,8 +15,11 @@ function createWindow () {
         }
     });
     
-    win.loadURL('http://localhost:5173');
-    //win.loadFile(path.join(__dirname,  '../frontend/dist/index.html'));
+     if (process.env.NODE_ENV === 'development') {
+        win.loadURL('http://localhost:5173');
+    } else {
+        win.loadFile(path.join(__dirname, '../frontend/dist/index.html'));
+    }
 }
 
 app.whenReady().then(createWindow);
