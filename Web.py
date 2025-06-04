@@ -36,17 +36,12 @@ def speedtest():
 def user_speedtest():
     data = request.json
     username = data.get('username')
-    latitude = data.get('latitude')
-    longitude = data.get('longitude')
-    download = data.get('download')
-    upload = data.get('upload')
-    avg_ping = data.get('avg_ping')
     packet_loss = "0"
     if not username:
         return jsonify({'success': False, 'message': 'Username required'}), 400
 
     # Run the speed test
-    #download, upload, packet_loss, avg_ping = test.speedTest()
+    download, upload, packet_loss, avg_ping = test.speedTest()
 
     # Store the result in the database
     speedtest_record = {
@@ -55,11 +50,7 @@ def user_speedtest():
         'upload': upload,
         'packet_loss': packet_loss,
         'avg_ping': avg_ping,
-        'timestamp': datetime.now(timezone.utc),
-        'location': {
-            'latitude': latitude,
-            'longitude': longitude
-        } if latitude is not None and longitude is not None else None
+        'timestamp': datetime.now(timezone.utc)
 
     }
     leaderboard_collection.insert_one(speedtest_record)
@@ -124,4 +115,5 @@ def upload_test():
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
+    app.run()
     

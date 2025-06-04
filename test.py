@@ -1,9 +1,8 @@
 import speedtest
 import platform
 import psutil
-import time
-import requests
-
+import subprocess
+import re
 
 def get_size(bytes, suffix="B"):
     """
@@ -17,16 +16,16 @@ def get_size(bytes, suffix="B"):
         if bytes < factor:
             return f"{bytes:.2f}{unit}{suffix}"
         bytes /= factor
-def http_latency(url="https://www.google.com"):
-    try:
-        start = time.time()
-        requests.get(url, timeout=2)
-        end = time.time()
-        return round((end - start) * 1000, 2)  # ms
-    except Exception as e:
-        return str(e)
+
+def ping_host(host):
+    # Use 'ping' instead of 'ping.exe' for Linux
+    param = '-n' if platform.system().lower() == 'windows' else '-c'
+    command = ['ping', param, '1', host]
+    result = (subprocess.run(command, capture_output=True, text=True))
+    return result.stdout
 
 def speedTest():
+        
     s = speedtest.Speedtest(secure=True)
 
     download = s.download()
@@ -38,25 +37,27 @@ def speedTest():
     print('Download speed is:', download, 'MB per second')
     print('Upload speed is:', upload, 'MB per second')
 
-    ping_result = http_latency("https://www.google.com")
-    print(f"Raw HTTP latency result: {ping_result}")
-    if isinstance(ping_result, float):
-        ping_time = f"{ping_result:.1f}"
-        packet_loss = 0
-    else:
-        ping_time = None
-        packet_loss = 100
-    print(f"Raw ping result: {ping_result}")  # Add this line
-    # Since ping_host returns either a float (ms) or a string, handle accordingly
-    if isinstance(ping_result, float):
-        ping_time = f"{ping_result:.1f}"
-        packet_loss = 0  # No packet loss if we got a response
-    else:
-        ping_time = None
-        packet_loss = 100  # Assume 100% packet loss if no response
+    output = ping_host("www.google.com")
+    # Extract packet loss
+
+    match = re.search(r'(\d+)\s*%', output)
+    packet_loss = int(match.group(1)) if match else None
+
+    # Extract average ping
+    ping_match = re.search(r'time=(\d+(?:\.\d+)?)\s*ms', output)
+
+    if ping_match:
+        ping_str = ping_match.group(1)
+        
+        # Ensure it has exactly 1 decimal place
+        if '.' not in ping_str:
+            ping_time = f"{ping_str}.0"
+        else:
+            # Optional: ensure only 1 decimal place even if more
+            ping_time = f"{float(ping_str):.1f}"
 
     print(f"Packet Loss: {packet_loss}%")
-    print(f"Average Ping: {ping_time if ping_time is not None else 'N/A'} ms")
+    print(f"Average Ping: {ping_time} ms")
 
     return [download, upload, packet_loss, ping_time]
 
