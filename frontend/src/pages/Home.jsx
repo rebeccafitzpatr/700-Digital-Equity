@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../App.css'
-import { measureDownloadSpeed, measureLatency, measureUploadSpeed } from '../ClientSpeedTest.js';
+// import { measureDownloadSpeed, measureLatency, measureUploadSpeed } from '../ClientSpeedTest.js';
 
 export default function Home() {
   const [results, setResults] = useState(null);
@@ -29,15 +29,15 @@ export default function Home() {
         try {
           
           // Send latitude and longitude to backend with the speed test result
-          const latency = await measureLatency();
-          const downloadSpeed = await measureDownloadSpeed();
-          const uploadSpeed = await measureUploadSpeed();
+          // const latency = await measureLatency();
+          // const downloadSpeed = await measureDownloadSpeed();
+          // const uploadSpeed = await measureUploadSpeed();
 
           const TEST = {
             username: username || 'guest',
-            download: downloadSpeed,
-            avg_ping: latency,
-            upload: uploadSpeed,
+            // download: downloadSpeed,
+            // avg_ping: latency,
+            // upload: uploadSpeed,
            
           };
 
