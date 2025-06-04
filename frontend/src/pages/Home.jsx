@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../App.css'
-import { measureDownloadSpeed, measureLatency, measureUploadSpeed } from '../ClientSpeedTest.js';
+// import { measureDownloadSpeed, measureLatency, measureUploadSpeed } from '../ClientSpeedTest.js';
 
 export default function Home() {
   const [results, setResults] = useState(null);
@@ -25,44 +25,46 @@ export default function Home() {
   const runSpeedTest = async () => {
     setLoading(true);
     // Check for logged-in user (adjust this logic as needed)
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
+   
         try {
-          const { latitude, longitude } = position.coords;
+          
           // Send latitude and longitude to backend with the speed test result
-          const latency = await measureLatency();
-          const downloadSpeed = await measureDownloadSpeed();
-          const uploadSpeed = await measureUploadSpeed();
+          // const latency = await measureLatency();
+          // const downloadSpeed = await measureDownloadSpeed();
+          // const uploadSpeed = await measureUploadSpeed();
 
-          const result = {
+          const TEST = {
             username: username || 'guest',
-            download: downloadSpeed,
-            avg_ping: latency,
-            upload: uploadSpeed,
-            latitude,
-            longitude
+            // download: downloadSpeed,
+            // avg_ping: latency,
+            // upload: uploadSpeed,
+           
           };
 
-          await fetch('/api/speedtest', {
+        const response = await fetch('https://700-digital-equity-production-c1d4.up.railway.app/api/speedtest', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(result)
+          body: JSON.stringify(TEST)
         });
 
+        const data = await response.json();
 
-          setResults(result)
+        if (data.success && data.result) {
+          setResults(data.result); // Use the server's result object
+        } else {
+          throw new Error(data.message || 'Unknown error from server');
+        }
+
+
+          setResults(data.result)
           setLoading(false);
         } catch (error) {
           console.error('Error fetching speed test results:', error);
         } finally {
           setLoading(false);
         }
-      },
-      (error) => {
-        console.error('Geolocation error:', error);
-        setLoading(false);
-      }
-    );
+      
+     
   };
     return (
 
