@@ -4,6 +4,7 @@ import psutil
 import subprocess
 import re
 
+from ping3 import ping
 def get_size(bytes, suffix="B"):
     """
     Scale bytes to its proper format
@@ -37,7 +38,7 @@ def speedTest():
     print('Download speed is:', download, 'MB per second')
     print('Upload speed is:', upload, 'MB per second')
 
-    output = ping_host("www.google.com")
+    output = ping("www.google.com")
     # Extract packet loss
 
     match = re.search(r'(\d+)\s*%', output)
