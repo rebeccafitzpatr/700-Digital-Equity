@@ -46,7 +46,8 @@ def speedTest():
     total_ping = 0
     successful_pings = 0
     for _ in range(count):
-        result = ping("www.google.com", timeout=2)
+        result = ping("8.8.8.8", timeout=2)
+        print(f"Ping result: {result}")
         if result is None:
             lost += 1
         else:
