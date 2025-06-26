@@ -26,28 +26,31 @@ def ping_host(host):
     return result.stdout
 
 def speedTest():
-        
     s = speedtest.Speedtest(secure=True)
 
-    download = s.download()
-    upload = s.upload()
+    # Raw results
+    raw_download = s.download()
+    raw_upload = s.upload()
+    print(f"Raw download (bits/sec): {raw_download}")
+    print(f"Raw upload (bits/sec): {raw_upload}")
 
-    download = format(download/1000000/8, '.2f')
-    upload = format(upload/1000000/8, '.2f')
+    # Convert to Mbps and MBps
+    download_mbps = raw_download / 1_000_000
+    upload_mbps = raw_upload / 1_000_000
+    download_MBps = download_mbps / 8
+    upload_MBps = upload_mbps / 8
 
-    print('Download speed is:', download, 'MB per second')
-    print('Upload speed is:', upload, 'MB per second')
+    print(f"Download: {download_mbps:.2f} Mbps, {download_MBps:.2f} MB/s")
+    print(f"Upload: {upload_mbps:.2f} Mbps, {upload_MBps:.2f} MB/s")
 
-    #output = ping_host("www.google.com")
-    # Extract packet loss
-
+    # Ping test
     count = 4
     lost = 0
     total_ping = 0
     successful_pings = 0
     for _ in range(count):
         result = ping("www.google.com", timeout=2)
-        print(f"Ping result: {result}")
+        print(f"Ping result (seconds): {result}")
         if result is None:
             lost += 1
         else:
@@ -56,7 +59,11 @@ def speedTest():
     packet_loss = (lost / count) * 100
     ping_time = f"{(total_ping / successful_pings) * 1000:.1f}" if successful_pings > 0 else None
 
-    return [download, upload, packet_loss, ping_time]    
+    print(f"Packet Loss: {packet_loss}%")
+    print(f"Average Ping: {ping_time} ms")
+
+    # Return MBps for consistency with your frontend
+    return [f"{download_MBps:.2f}", f"{upload_MBps:.2f}", packet_loss, ping_time]    
 
 def getHardware():
     print("="*40, "System Information", "="*40)
