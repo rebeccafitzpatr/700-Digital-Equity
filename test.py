@@ -32,8 +32,8 @@ def speedTest():
     download = s.download()
     upload = s.upload()
 
-    download = format(download/1000000, '.2f')
-    upload = format(upload/1000000, '.2f')
+    download = format(download/1000000/8, '.2f')
+    upload = format(upload/1000000/8, '.2f')
 
     print('Download speed is:', download, 'MB per second')
     print('Upload speed is:', upload, 'MB per second')
@@ -46,7 +46,7 @@ def speedTest():
     total_ping = 0
     successful_pings = 0
     for _ in range(count):
-        result = ping("8.8.8.8", timeout=2)
+        result = ping("www.google.com", timeout=2)
         print(f"Ping result: {result}")
         if result is None:
             lost += 1
